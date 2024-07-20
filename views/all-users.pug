@@ -1,0 +1,28 @@
+extends base
+
+block append head 
+  link(rel="stylesheet" href="/css/all-users.css")
+
+
+block content 
+  .container
+    h1 All Users
+    table.user-table
+      thead
+        tr
+          th #
+          th User Name
+          th Associated Courses
+          th Actions
+      tbody
+        each user, index in users
+          tr
+            td #{index + 1}
+            td= user.name
+            td 
+              each course in user.associatedCourse
+                p #{course.courseName} (#{course.courseCode}) - Credits: #{course.credits}
+
+            td
+              button.btn.btn-view Assign
+              button.btn.btn-delete Delete

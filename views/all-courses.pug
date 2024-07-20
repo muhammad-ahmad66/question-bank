@@ -21,5 +21,6 @@ block content
             td= course.courseCode
             td= course.credits
             td 
-              button.btn View Details
+              button.btn Details
               button.btn.btn-delete#btn-delete-course(data-course-id=`${course._id}`) Delete
+              button.btn#btn-assign-to(data-course-id=`${course._id}`) Assign To

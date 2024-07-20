@@ -24,6 +24,11 @@ router.post("/", async (req, res) => {
       credits: req.body.credits,
     });
 
+    // await User.updateMany(
+    //   {}, // Filter: {} means all users
+    //   { $push: { associatedCourse: course._id } } // Update: Add course ID to associatedCourse array
+    // );
+
     res.status(200).json({
       status: "success",
       data: {

@@ -122,8 +122,8 @@ if (userPasswordForm)
     document.getElementById("password-confirm").value = "";
   });
 
+// ! CREATE COURSE
 const fromCreateCourse = document.getElementById("from-create-course");
-
 if (fromCreateCourse)
   fromCreateCourse.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -155,7 +155,7 @@ if (fromCreateCourse)
       });
   });
 
-// Delete course
+// ! DELETE COURSE
 const deleteCourseBtn = document.querySelectorAll("#btn-delete-course");
 if (deleteCourseBtn)
   deleteCourseBtn.forEach((deleteBtn) => {
@@ -174,3 +174,12 @@ if (deleteCourseBtn)
       }
     });
   });
+
+// ! Sending Course Id to All User Page
+const assignButtons = document.querySelectorAll("#btn-assign-to");
+assignButtons.forEach((button) => {
+  button.addEventListener("click", (event) => {
+    const courseId = event.target.getAttribute("data-course-id");
+    window.location.href = `/all-user?courseId=${courseId}`;
+  });
+});
