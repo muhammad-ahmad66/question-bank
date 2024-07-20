@@ -279,3 +279,9 @@
 .persons-container__no-persons a:active {
   text-decoration: underline;
 }
+
+.btn-container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}

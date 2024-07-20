@@ -2,6 +2,7 @@ const User = require("../models/userModel");
 // const Person = require('../models/personModel');
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
+const Course = require("../models/Course");
 // const APIFeatures = require('./../utils/apiFeature');
 
 exports.getAccount = async (req, res) => {
@@ -148,6 +149,24 @@ exports.getSignupForm = catchAsync(async (req, res, next) => {
     page: "login",
   });
 });
+
+exports.getCreateCourseForm = catchAsync(async (req, res, next) => {
+  res.status(200).render("create-course-form", {
+    title: "Create a new course",
+    page: "home",
+  });
+});
+
+exports.getAllCourses = catchAsync(async (req, res, next) => {
+  const courses = await Course.find();
+
+  res.status(200).render("all-courses", {
+    title: "All Courses",
+    page: "All Courses",
+    courses,
+  });
+});
+
 /*
 exports.getAllUsers = catchAsync(async (req, res, next) => {
   const users = await User.find();

@@ -13,19 +13,23 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Create a new course
 router.post("/", async (req, res) => {
-  const course = new Course({
-    courseName: req.body.courseName,
-    description: req.body.description,
-    department: req.body.department,
-    semester: req.body.semester,
-    credits: req.body.credits,
-  });
-
   try {
-    const newCourse = await course.save();
-    res.status(201).json(newCourse);
+    const course = await Course.create({
+      courseName: req.body.courseName,
+      courseCode: req.body.courseCode,
+      description: req.body.description,
+      department: req.body.department,
+      semester: req.body.semester,
+      credits: req.body.credits,
+    });
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        course,
+      },
+    });
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -63,10 +67,16 @@ router.patch("/:id", getCourse, async (req, res) => {
 });
 
 // Delete a course
-router.delete("/:id", getCourse, async (req, res) => {
+// Route to delete a course
+router.delete("/:id", async (req, res) => {
   try {
-    await res.course.remove();
-    res.json({ message: "Course deleted" });
+    const deletedCourse = await Course.findByIdAndDelete(req.params.id);
+
+    if (!deletedCourse) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+
+    res.status(200).json({ message: "Course deleted successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

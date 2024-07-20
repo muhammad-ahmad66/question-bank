@@ -121,3 +121,56 @@ if (userPasswordForm)
     document.getElementById("password").value = "";
     document.getElementById("password-confirm").value = "";
   });
+
+const fromCreateCourse = document.getElementById("from-create-course");
+
+if (fromCreateCourse)
+  fromCreateCourse.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const courseName = document.getElementById("courseName").value;
+    const courseCode = document.getElementById("courseCode").value;
+    const description = document.getElementById("description").value;
+    const department = document.getElementById("department").value;
+    const semester = document.getElementById("semester").value;
+    const credits = document.getElementById("credits").value;
+
+    axios
+      .post("/courses", {
+        courseName,
+        courseCode,
+        description,
+        department,
+        semester,
+        credits,
+      })
+      .then((response) => {
+        console.log(response);
+        showAlert("success", "Course created successfully!");
+        document.getElementById("from-create-course").reset();
+        window.location.assign("/all-courses");
+      })
+      .catch((error) => {
+        console.error(error);
+        showAlert("error", "Failed to create course!");
+      });
+  });
+
+// Delete course
+const deleteCourseBtn = document.querySelectorAll("#btn-delete-course");
+if (deleteCourseBtn)
+  deleteCourseBtn.forEach((deleteBtn) => {
+    deleteBtn.addEventListener("click", async (e) => {
+      try {
+        e.preventDefault();
+        const courseId = deleteBtn.getAttribute("data-course-id");
+        console.log(courseId);
+        // Send a DELETE request to the API to delete the course
+        await axios.delete(`/courses/${courseId}`);
+        showAlert("success", "Course deleted successfully!");
+        // Reload the page to reflect the changes
+        window.location.reload();
+      } catch (error) {
+        console.log(error);
+      }
+    });
+  });

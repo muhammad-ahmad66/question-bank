@@ -47,24 +47,12 @@ const userSchema = mongoose.Schema({
   },
   passwordChangedAt: Date,
 
-  // associatedPersons: [
-  //   {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: "Person",
-  //   },
-  // ],
-
-  // cart: [
-  //   {
-  //     product_id: {
-  //       type: mongoose.Schema.Types.ObjectId,
-  //       ref: "Product",
-  //       required: true,
-  //     },
-  //     quantity: { type: Number, required: true },
-  //   },
-  // ],
-  // orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order" }],
+  associatedCourse: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Course",
+    },
+  ],
 });
 
 userSchema.pre("save", async function (next) {

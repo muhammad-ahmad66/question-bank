@@ -1,0 +1,30 @@
+extends base 
+
+block append head 
+  link(rel="stylesheet", href="/css/create-course-form.css")
+
+block content 
+
+  .form-container
+    h2 Add Course
+    form(action="")#from-create-course
+      .form-group
+        label(for="courseName") Course Name:
+        input#courseName.form-input(type="text" name="courseName" required value='PF')
+      .form-group
+        label(for="courseCode") Course Code:
+        input#courseCode.form-input(type="text" name="courseCode" required value='1102')
+      .form-group
+        label(for="description") Description:
+        input#description.form-input(type="text" name="description" required value='Programming Fundamentals')
+      .form-group
+        label(for="department") Department:
+        input#department.form-input(type="text" name="department" required value="CS-IT")
+      .form-group
+        label(for="semester") Semester:
+        input#semester.form-input(type="text" name="semester" required value="5th")
+      .form-group
+        label(for="credits") Credits:
+        input#credits.form-input(type="number" name="credits" required value='3')
+      .form-group
+        button#btn-create-course.btn(type="submit") Add Course

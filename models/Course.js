@@ -7,6 +7,11 @@ const courseSchema = new Schema({
     type: String,
     required: true,
   },
+  courseCode: {
+    type: String,
+    required: [true, "A course must have a Course Code"],
+    unique: true,
+  },
   description: {
     type: String,
   },

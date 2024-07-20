@@ -6,6 +6,19 @@ const authController = require("../controllers/authController");
 const router = express.Router();
 
 // router.get("/", viewsController.getHome);
+router.get(
+  "/create-course-form",
+  authController.protect,
+  authController.restrictTo("admin"),
+  viewsController.getCreateCourseForm
+);
+
+router.get(
+  "/all-courses",
+  authController.protect,
+  authController.restrictTo("admin"),
+  viewsController.getAllCourses
+);
 
 router.get("/", authController.isLoggedIn, viewsController.getLoginForm);
 router.get("/signup", authController.isLoggedIn, viewsController.getSignupForm);

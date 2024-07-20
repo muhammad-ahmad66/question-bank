@@ -1,0 +1,72 @@
+html {
+  font-size: 62.5%; /* 10px base font size */
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 2rem;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 0.8rem;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  color: #113492;
+  margin-bottom: 2rem;
+  font-size: 2.4rem;
+}
+
+.course-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+}
+
+.course-table th,
+.course-table td {
+  border: 0.1rem solid #ddd;
+  padding: 1rem;
+  text-align: left;
+  font-size: 1.6rem;
+}
+
+.course-table th {
+  background-color: #113492;
+  color: white;
+}
+
+.course-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.btn {
+  background-color: #113492;
+  color: white;
+  padding: 0.8rem 1.2rem;
+  border: none;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  font-size: 1.4rem;
+  margin-right: 0.5rem;
+  transition: all 0.3s;
+}
+
+.btn:hover {
+  background-color: #0d2d70;
+}
+
+.btn-delete {
+  background-color: #e74c3c;
+}
+
+.btn-delete:hover {
+  background-color: #c0392b;
+}
