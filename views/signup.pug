@@ -1,0 +1,28 @@
+extends base
+
+block append head 
+  link(rel="stylesheet", href="css/login.css")
+
+block content
+  .container
+    .signin-form
+      h2 Sign Up
+      form#signup-form
+        .input-group
+          label(for='name') Username
+          input#name(type='text' name='name' required='')
+        .input-group
+          label(for='email') Email
+          input#email(type='email' name='email' required='')
+        .input-group
+          label(for='password') Password
+          input#password(type='password' name='password' required='')
+        .input-group
+          label(for='password-confirm') Password Confirm
+          input#password-confirm(type='password' name='passwordConfirm' required='')
+        button(type='submit') Signup 
+
+        .already-acc Already signed?
+          | 
+          a(href="/") Login
+        

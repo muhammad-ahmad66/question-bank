@@ -1,0 +1,21 @@
+extends base
+
+block append head 
+  link(rel="stylesheet", href="css/login.css")
+
+block content
+  .container
+    .signin-form
+      h2 Sign In
+      form#login-form
+        .input-group
+          label(for='username') Username
+          input#email(type='email' name='email' required='' value='ehtii.sham4277@gmail.com')
+        .input-group
+          label(for='password') Password
+          input#password(type='password' name='password' required='' value="Ehtii<3817")
+        button(type='submit') Sign In
+
+        .already-acc Not registered?
+          | 
+          a(href="/signup") Signup

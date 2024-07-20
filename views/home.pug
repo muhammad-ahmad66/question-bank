@@ -1,0 +1,186 @@
+extends base 
+
+mixin navItem(link, text, icon, active)
+  li(class=`${active ? 'side-nav--active': ''}`)
+    a(href=`${link}`, data-section=`${text.toLowerCase().replace(/\s+/g, '-')}`)
+      //- svg
+      //-   use(xlink:href=`img/icons.svg#icon-${icon}`)
+      //- | #{text}
+      i(class=`fa-solid fa-${icon}`)
+      | &nbsp;   #{text}
+
+block append head 
+  link(rel="stylesheet", href="/css/home.css")
+
+block content
+  main.main
+    .user-view
+      nav.user-view__menu
+        ul.side-nav
+          +navItem('#', 'Profile Settings', 'gear', true)
+          +navItem('#', 'Courses', 'user-check')
+          +navItem('#', 'Assessments', 'users-viewfinder')
+          +navItem('#', 'Other Activities', 'list-check')
+        - if(user.role === 'admin')
+          .admin-nav
+            h5.admin-nav__heading Admin
+            ul.side-nav
+              +navItem('#', 'Manage Users', 'users-cog')
+              +navItem('#', 'Manage Courses', 'user-check')
+              +navItem('#', 'Assign Question', 'search')
+              +navItem('#', 'Other Settings', 'cog')
+
+      .user-view__content
+        #profile-settings.user-view__form-container.active
+          h2.heading-secondary.ma-bt-md Your account settings
+          form.form.form-user-data
+            .form__group
+              label.form__label(for='name') Name
+              input#name.form__input(type='text', value=`${user.name}`, required name="name")
+            .form__group.ma-bt-md
+              label.form__label(for='email') Email address
+              input#email.form__input(type='email', value=`${user.email}`, required name="email")
+            .form__group.form__photo-upload
+              img.form__user-photo(src=`/img/users/${user.photo}`, alt=`${user.name} Photo`)
+              input.form__upload(type="file", accept="image/*", id="photo", name="photo")
+              label(for="photo") Choose new photo
+            .form__group.right
+              button.btn.btn--small.btn--green Save settings
+          .line &nbsp;
+          h2.heading-secondary.ma-bt-md Password change
+          form.form.form-user-password
+            .form__group
+              label.form__label(for='password-current') Current password
+              input#password-current.form__input(type='password', placeholder='••••••••', required, minlength='8')
+            .form__group
+              label.form__label(for='password') New password
+              input#password.form__input(type='password', placeholder='••••••••', required, minlength='8')
+            .form__group.ma-bt-lg
+              label.form__label(for='password-confirm') Confirm password
+              input#password-confirm.form__input(type='password', placeholder='••••••••', required, minlength='8')
+            .form__group.right
+              button.btn.btn--small.btn--green.btn--save-password Save password
+
+        #courses.user-view__form-container
+          h2.heading-secondary.ma-bt-md Courses
+          if user.associatedPersons && user.associatedPersons.length > 0
+            .persons-container
+              each person in user.associatedPersons 
+                .person-card
+                  img.person-card__photo(src=`/img/persons/${person.photo}`, alt=`${person.name}'s Photo`)
+                  h3.person-card__name #{person.name}
+                  p.person-card__location= `From: ${person.city}, ${person.country}`
+                  p.person-card__description= person.additionalDetails
+                  .person-card__btn-box 
+                    a.person-card__btn(href=`/update-person`, class="update-button" data-id=person._id)
+                      i.fa-solid.fa-user-pen  
+                      | Update
+                    a.person-card__btn(href="javascript:void(0);" class="delete-button" data-id=person._id)
+                      i.fa-solid.fa-trash  
+                      | Delete
+                  a.person-card__btn-detail(href=`/persons/${person._id}`) Details
+          else 
+            .persons-container__no-persons
+              p.persons-container__no-persons-text
+                | You have no found persons yet!
+              p.persons-container__no-persons-text  
+                | Please add a new Person here 
+                a.persons-container__no-persons-link(href="http://127.0.0.1:800/report-found-person", class="persons-container__link") Add New Person
+
+
+        .reported-form-container#update-form-container
+          form.reported-form.update-person-form(action="#", method="post")
+            .reported-form__group
+              label.reported-form__label(for="person-name") Full Name:
+              input.reported-form__input(type="text", id="person-name", name="name", placeholder="Enter Person's name")
+            .reported-form__group
+              label.reported-form__label Gender:
+              select.reported-form__input(id="person-gender", name="gender")
+                option(value="male") Male
+                option(value="female") Female
+                option(value="non-binary") non-binary
+            .reported-form__group
+              label.reported-form__label(for="person-approxAge") Approximate Age:
+              input.reported-form__input(type="number", id="person-approxAge", name="approxAge", placeholder="Enter approximate age")
+            .reported-form__group
+              label.reported-form__label(for="person-UniqueIdentifier") Unique Identifier:
+              input.reported-form__input(type="text", id="person-UniqueIdentifier", name="UniqueIdentifier", placeholder="Enter any unique identifier")
+            .reported-form__group.full-width
+              label.reported-form__label(for="person-clothingDescription") Clothing Description:
+              textarea.reported-form__input(type="text", id="person-clothingDescription", name="clothingDescription", placeholder="Enter him/her clothing description", rows='3')
+            .reported-form__group
+              label.reported-form__label(for="person-HairColor") Hair Color:
+              input.reported-form__input(type="text", id="person-HairColor", name="HairColor", placeholder="Enter hair color")
+            .reported-form__group
+              //- img.form__user-photo(src=`img/users/default.jpg`, alt=` Photo`)
+              //- input.form__upload(type="file", accept="image/*", id="photo", name="photo")
+              //- label(for="photo") Choose a photo
+            .reported-form__group
+              label.reported-form__label Country:
+              input.reported-form__input(type="text", id="person-country", name="country", placeholder="Enter a country name")
+            .reported-form__group
+              label.reported-form__label(for="person-city") City:
+              input.reported-form__input(type="text", id="person-city", name="city", placeholder="Enter a city name")
+            //- .reported-form__group
+            //-   label.reported-form__label(for="lastSeenDate") Last Seen Date:
+            //-   input.reported-form__input(type="date", id="lastSeenDate", name="lastSeenDate")
+            .reported-form__group.full-width
+              label.reported-form__label(for="person-additionalDetails") Additional Details:
+              textarea.reported-form__input(id="person-additionalDetails", name="additionalDetails", placeholder="Enter any additional details. like physical, mental or medical conditions etc...", rows='6')
+            .reported-form__group
+              button.btn.btn--green(type="submit") Submit
+
+
+        #assessments.user-view__form-container
+          h2.heading-secondary.ma-bt-md Assessments
+          //-  user.missingReportedPersons
+          if user.missingReportedPersons && user.missingReportedPersons.length > 0
+            .persons-container
+              each person in user.missingReportedPersons 
+                .person-card
+                  img.person-card__photo(src=`/img/missing-persons/${person.photo}`, alt=`${person.name}'s Photo`)
+                  h3.person-card__name #{person.name}
+                  p.person-card__location= `From: ${person.location.city}, ${person.location.country}`
+                  p.person-card__description= person.additionalDetails
+                  .person-card__btn-box 
+                    a.person-card__btn(href=`/persons/${person._id}`)
+                      i.fa-solid.fa-user-pen  
+                      | Update
+                    a.person-card__btn(href=`/persons/${person._id}`)
+                      i.fa-solid.fa-trash  
+                      | Delete
+                  a.person-card__btn-detail(href=`/persons/${person._id}`) Details
+          else 
+            .persons-container__no-persons
+              p.persons-container__no-persons-text
+                | You have no found persons yet!
+              p.persons-container__no-persons-text  
+                | Please add a new Person here 
+                a.persons-container__no-persons-link(href="http://127.0.0.1:800/report-found-person", class="persons-container__link") Add New Person
+
+               
+        #other-activities.user-view__form-container
+          h2.heading-secondary.ma-bt-md Other Activities
+          p This is the Filhal kly ni section. Content for Filhal kly ni goes here.
+
+        // Admin sections
+        //- ! For owner it's not working.
+        if user.role === 'owner' || user.role === 'admin' || user.role === 'Owner' || user.role === 'OWNER'
+
+          #manage-users.user-view__form-container
+            h2.heading-secondary.ma-bt-md Manage Users
+            p This is the Manage Users section. Here you can manage users.
+            a.btn.btn--green.btn--small(href="/all-users") Get All Users
+
+
+          #manage-courses.user-view__form-container
+            h2.heading-secondary.ma-bt-md Manage Courses
+            p This is the Manage Persons section. Here you can manage persons.
+
+          #assign-question.user-view__form-container
+            h2.heading-secondary.ma-bt-md Manage Missing Persons
+            p This is the Manage Reviews section. Here you can manage reviews.
+
+          #other-settings.user-view__form-container
+            h2.heading-secondary.ma-bt-md Other Settings
+            p This is the Manage Bookings section. Here you can manage bookings.
