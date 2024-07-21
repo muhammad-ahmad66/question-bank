@@ -182,8 +182,41 @@ block content
               a(href="").btn-text Manage course
 
           #assign-question.user-view__form-container
-            h2.heading-secondary.ma-bt-md Manage Missing Persons
-            p This is the Manage Reviews section. Here you can manage reviews.
+            .form-container
+              h2.heading-secondary.ma-bt-md Add Question
+              form(action="")#from-add-question
+                .form-group
+                  label(for="questionText") Question Text
+                  //- input#questionText.form-input(type="text" name="questionText" required value='PF')
+                  textarea#questionText.form-input(name="questionText" rows='5')
+
+                // dropdown menu to show all the courses that are available in our application, loop
+                .form-group
+                  label(for="courseId") Courses
+                  select#courseId.form-input
+                    each course in courses
+                      option(value=course._id)= course.courseName
+
+                .form-group
+                  label(for="clo") CLO
+                  input#clo.form-input(type="text" name="clo" required )
+                .form-group
+                  label(for="plo") PLO
+                  input#plo.form-input(type="text" name="plo" required )
+                
+                .form-group
+                  label(for="marks") Marks
+                  input#marks.form-input(type="number" name="marks" required)
+                .form-group
+                  label(for="difficulty") Difficulty
+                  select#difficulty.form-input
+                    option(value='easy') Easy
+                    option(value='medium') Medium
+                    option(value='hard') Hard
+
+
+                .form-group
+                  button#btn-create-question.btn(type="submit" data-created-by=`${user._id}`) Add Question
 
           #other-settings.user-view__form-container
             h2.heading-secondary.ma-bt-md Other Settings

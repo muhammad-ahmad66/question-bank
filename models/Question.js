@@ -15,6 +15,9 @@ const questionSchema = new Schema({
     type: Number,
     required: true,
   },
+  marks: {
+    type: Number,
+  },
   difficulty: {
     type: String,
     enum: ["easy", "medium", "hard"],

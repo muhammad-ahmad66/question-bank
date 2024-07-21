@@ -50,6 +50,9 @@ exports.getHome = async (req, res) => {
   // if (popOptions) query = query.populate(popOptions);
   const doc = await query;
 
+  // getting all courses
+  const courses = await Course.find();
+
   console.log("Document: ", doc);
 
   if (!doc) {
@@ -60,6 +63,7 @@ exports.getHome = async (req, res) => {
     title: "Your account",
     user: doc,
     page: "home",
+    courses,
   });
 };
 

@@ -10,21 +10,21 @@ block content
     form(action="")#from-create-course
       .form-group
         label(for="courseName") Course Name:
-        input#courseName.form-input(type="text" name="courseName" required value='PF')
+        input#courseName.form-input(type="text" name="courseName" required)
       .form-group
         label(for="courseCode") Course Code:
-        input#courseCode.form-input(type="text" name="courseCode" required value='1102')
+        input#courseCode.form-input(type="text" name="courseCode" required )
       .form-group
         label(for="description") Description:
-        input#description.form-input(type="text" name="description" required value='Programming Fundamentals')
+        input#description.form-input(type="text" name="description" required )
       .form-group
         label(for="department") Department:
-        input#department.form-input(type="text" name="department" required value="CS-IT")
+        input#department.form-input(type="text" name="department" required)
       .form-group
         label(for="semester") Semester:
-        input#semester.form-input(type="text" name="semester" required value="5th")
+        input#semester.form-input(type="text" name="semester" required )
       .form-group
         label(for="credits") Credits:
-        input#credits.form-input(type="number" name="credits" required value='3')
+        input#credits.form-input(type="number" name="credits" required)
       .form-group
         button#btn-create-course.btn(type="submit") Add Course

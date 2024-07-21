@@ -215,3 +215,42 @@ btnAssignCourse.forEach(function (btn) {
     }
   });
 });
+
+// ! ADD QUESTION
+const addQuestionForm = document.getElementById("from-add-question");
+
+if (addQuestionForm)
+  addQuestionForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const questionText = document.getElementById("questionText").value;
+    const courseId = document.getElementById("courseId").value;
+    const clo = document.getElementById("clo").value;
+    const plo = document.getElementById("plo").value;
+    const difficulty = document.getElementById("difficulty").value;
+    const marks = document.getElementById("marks").value;
+    const userId = document.getElementById("btn-create-question").dataset
+      .createdBy;
+
+    try {
+      const response = await axios.post("/questions", {
+        questionText,
+        courseId,
+        clo,
+        plo,
+        difficulty,
+        marks,
+        createdBy: userId,
+      });
+
+      if (response.status === 201) {
+        showAlert("success", "Question added successfully!");
+        document.getElementById("from-add-question").reset();
+        window.location.reload(); // Refresh the page to reflect the changes
+      } else {
+        showAlert("error", "Failed to add question!");
+      }
+    } catch (err) {
+      console.error("Error adding question:", err);
+      showAlert("error", err.response.data.message);
+    }
+  });
