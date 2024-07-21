@@ -5,13 +5,13 @@ header.header
     //- img(src="/img/findReunite-logo-white-.png", alt="findReunite Logo")
   nav.nav.nav--tours
     a.nav__el(href="/home") Home
-    a.nav__el(href="/search-person") Search Person
+    a.nav__el(href="/") Courses
     a.nav__el(href="#") About
     a.nav__el(href="/contact-us") Contact Us
   nav.nav.nav--user
     if user
       a.nav__el.nav__el--logout#logout-btn Log out
-      a.nav__el(href='/me')
+      a.nav__el(href='/home')
         img.nav__user-img(src=`/img/users/${user.photo}`, alt=`Photo of ${user.name}`)
         //- img.nav__user-img(src=`img/users/default.jpg`, alt=`Photo of ${user.name}`)
         span= user.name.split(' ')[0]

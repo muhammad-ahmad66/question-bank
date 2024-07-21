@@ -183,3 +183,35 @@ assignButtons.forEach((button) => {
     window.location.href = `/all-user?courseId=${courseId}`;
   });
 });
+
+// ! Assigning User to Course
+const btnAssignCourse = document.querySelectorAll(
+  "#btn-course-assign-all-user"
+);
+
+btnAssignCourse.forEach(function (btn) {
+  btn.addEventListener("click", async function (event) {
+    event.preventDefault();
+    const courseId = btn.getAttribute("data-course-id");
+    const userId = btn.getAttribute("data-user-id");
+
+    console.log("CourseId: ", courseId);
+    console.log("UserId: ", userId);
+
+    try {
+      const response = await axios.post("/assign-course", {
+        userId,
+        courseId,
+      });
+
+      if (response.status === 200) {
+        showAlert("success", "Course assigned successfully");
+        window.location.reload(); // Refresh the page to reflect the changes
+      } else {
+      }
+    } catch (error) {
+      console.error("Error assigning course:", error);
+      showAlert("error", error.response.data.message);
+    }
+  });
+});

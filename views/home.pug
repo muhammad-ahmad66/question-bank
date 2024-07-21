@@ -17,8 +17,8 @@ block content
     .user-view
       nav.user-view__menu
         ul.side-nav
-          +navItem('#', 'Profile Settings', 'gear', true)
-          +navItem('#', 'Courses', 'user-check')
+          +navItem('#', 'Profile Settings', 'gear', )
+          +navItem('#', 'Courses', 'user-check', true)
           +navItem('#', 'Assessments', 'users-viewfinder')
           +navItem('#', 'Other Activities', 'list-check')
         - if(user.role === 'admin')
@@ -31,7 +31,7 @@ block content
               +navItem('#', 'Other Settings', 'cog')
 
       .user-view__content
-        #profile-settings.user-view__form-container.active
+        #profile-settings.user-view__form-container
           h2.heading-secondary.ma-bt-md Your account settings
           form.form.form-user-data
             .form__group
@@ -61,31 +61,31 @@ block content
             .form__group.right
               button.btn.btn--small.btn--green.btn--save-password Save password
 
-        #courses.user-view__form-container
-          h2.heading-secondary.ma-bt-md Courses
-          if user.associatedPersons && user.associatedPersons.length > 0
-            .persons-container
-              each person in user.associatedPersons 
-                .person-card
-                  img.person-card__photo(src=`/img/persons/${person.photo}`, alt=`${person.name}'s Photo`)
-                  h3.person-card__name #{person.name}
-                  p.person-card__location= `From: ${person.city}, ${person.country}`
-                  p.person-card__description= person.additionalDetails
-                  .person-card__btn-box 
-                    a.person-card__btn(href=`/update-person`, class="update-button" data-id=person._id)
-                      i.fa-solid.fa-user-pen  
-                      | Update
-                    a.person-card__btn(href="javascript:void(0);" class="delete-button" data-id=person._id)
-                      i.fa-solid.fa-trash  
-                      | Delete
-                  a.person-card__btn-detail(href=`/persons/${person._id}`) Details
+        #courses.user-view__form-container.active
+          h2.heading-secondary.ma-bt-md Your Courses
+          if user.associatedCourse.length <= 0
+            p.no-data-msg No course are Assigned Yet!!
+
           else 
-            .persons-container__no-persons
-              p.persons-container__no-persons-text
-                | You have no found persons yet!
-              p.persons-container__no-persons-text  
-                | Please add a new Person here 
-                a.persons-container__no-persons-link(href="http://127.0.0.1:800/report-found-person", class="persons-container__link") Add New Person
+            .user-course-container
+              table.course-table
+                thead
+                  tr
+                    th #
+                    th Course Name
+                    th Course Code
+                    th Credits
+                    th Actions
+                tbody
+                  each course, index in user.associatedCourse
+                    tr
+                      td #{index + 1}
+                      td= course.courseName
+                      td= course.courseCode
+                      td= course.credits
+                      td
+                        button.btn.btn-assign-course(data-course-id=course._id) View Questions
+                        //- button.btn.btn-delete Delete
 
 
         .reported-form-container#update-form-container
@@ -158,7 +158,7 @@ block content
                 | Please add a new Person here 
                 a.persons-container__no-persons-link(href="http://127.0.0.1:800/report-found-person", class="persons-container__link") Add New Person
 
-               
+
         #other-activities.user-view__form-container
           h2.heading-secondary.ma-bt-md Other Activities
           p This is the Filhal kly ni section. Content for Filhal kly ni goes here.

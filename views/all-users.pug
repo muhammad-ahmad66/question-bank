@@ -24,5 +24,9 @@ block content
                 p #{course.courseName} (#{course.courseCode}) - Credits: #{course.credits}
 
             td
-              button.btn.btn-view Assign
+              if !courseId
+                button#btn-course-assign-all-user.btn.btn-assign(data-user-id=`${user._id}`) Details
+
+              else
+                button#btn-course-assign-all-user.btn.btn-assign(data-course-id=`${courseId}` data-user-id=`${user._id}`) Assign
               button.btn.btn-delete Delete

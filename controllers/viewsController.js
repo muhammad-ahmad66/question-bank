@@ -33,7 +33,10 @@ exports.getAccount = async (req, res) => {
 
 exports.getHome = async (req, res) => {
   req.params.id = req.user.id;
-  let query = User.findById(req.params.id); /*.populate([
+  let query = User.findById(req.params.id).populate({
+    path: "associatedCourse",
+    select: "courseName courseCode description, credits",
+  }); /*.populate([
     {
       path: "associatedPersons",
       select: "name photo additionalDetails country city",
@@ -46,6 +49,8 @@ exports.getHome = async (req, res) => {
   */
   // if (popOptions) query = query.populate(popOptions);
   const doc = await query;
+
+  console.log("Document: ", doc);
 
   if (!doc) {
     return next(new AppError("No document found with that ID", 404));

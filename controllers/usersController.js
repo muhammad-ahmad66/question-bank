@@ -100,7 +100,7 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
 
 exports.getMe = catchAsync(async (req, res, next) => {
   req.params.id = req.user.id;
-  let query = User.findById(req.params.id).populate("associatedPersons");
+  let query = User.findById(req.params.id).populate("associatedCourse");
   // if (popOptions) query = query.populate(popOptions);
   const doc = await query;
 
