@@ -65,7 +65,7 @@ router.post("/assign-course", async (req, res) => {
       user.associatedCourse.push(courseId);
       await user.save({ validateBeforeSave: false });
     } else {
-      throw new Error("Course already Assigned to this user");
+      throw new Error("Course already assigned to this user");
     }
 
     res.status(200).json({
