@@ -334,3 +334,104 @@ label {
 .btn:hover {
   background-color: #0d2d70;
 }
+
+#assessments {
+  padding: 0;
+}
+
+.assessments-form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 0.8rem;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+}
+
+.assessments-heading {
+  color: #113492;
+  margin-bottom: 2rem;
+  font-size: 2.4rem;
+  text-align: center;
+}
+
+.assessments-row {
+  display: flex;
+  align-items: end;
+  /* justify-content: flex-end; */
+  margin-bottom: 2rem;
+}
+
+.assessments-input-group {
+  margin-right: 1rem;
+  flex: 1;
+}
+
+.assessments-input-group label {
+  display: block;
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.assessments-input-group select {
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1.6rem;
+  border: 0.1rem solid #ddd;
+  border-radius: 0.4rem;
+  transition: border 0.3s;
+}
+
+.assessments-input-group select:focus {
+  border: 0.1rem solid #113492;
+  outline: none;
+}
+
+.assessments-btn {
+  background-color: #113492;
+  color: white;
+  padding: 0.8rem 1.2rem;
+  border: none;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  font-size: 1.6rem;
+  transition: background-color 0.3s;
+}
+
+.assessments-btn:hover {
+  background-color: #0d2d70;
+}
+
+#assessmentContainer {
+  margin-top: 2rem;
+}
+
+.assessments-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.assessments-table th,
+.assessments-table td {
+  border: 0.1rem solid #ddd;
+  padding: 1rem;
+  text-align: left;
+  font-size: 1.6rem;
+}
+
+.assessments-table th {
+  background-color: #113492;
+  color: white;
+}
+
+.assessments-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.no-assessments-message {
+  display: none;
+  color: #333;
+  font-size: 1.6rem;
+  text-align: center;
+  margin-top: 2rem;
+}

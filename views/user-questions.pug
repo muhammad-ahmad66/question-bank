@@ -1,0 +1,33 @@
+
+
+extends base
+
+block append head 
+  link(rel="stylesheet", href="/css/user-questions.css")
+
+block content
+  .container
+    h1 Questions List
+    if questions.length
+      table.question-table
+        thead
+          tr
+            th #
+            th Question Text
+            th CLO
+            th PLO
+            th Difficulty
+            th Created By
+            th Created Date
+        tbody
+          each question, index in questions
+            tr
+              td #{index + 1}
+              td #{question.questionText}
+              td #{question.clo}
+              td #{question.plo}
+              td #{question.difficulty}
+              td #{question.createdBy.name}
+              td #{new Date(question.createdDate).toLocaleDateString()}
+    else
+      p No questions found.

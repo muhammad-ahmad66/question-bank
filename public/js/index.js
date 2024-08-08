@@ -254,3 +254,108 @@ if (addQuestionForm)
       showAlert("error", err.response.data.message);
     }
   });
+
+// ! Fetching questions for a specific course
+// Assuming you have a button to trigger the request and a way to get the courseId
+const btnViewQuestion = document.querySelectorAll("#btn-view-question");
+
+if (btnViewQuestion)
+  btnViewQuestion.forEach(function (btn) {
+    btn.addEventListener("click", async function () {
+      const courseId = btn.dataset.courseId;
+
+      try {
+        const response = await axios.get(
+          `/questions/course/${courseId}/questions`
+        );
+
+        if (response.status === 200) {
+          // const questions = response.data.data.questions;
+          // console.log("Questions:", questions);
+
+          window.location.href = `/courses/${courseId}/questions`;
+
+          // Handle the questions data (e.g., render them on the page)
+        }
+      } catch (error) {
+        console.error("Error fetching questions:", error);
+      }
+    });
+  });
+
+// ! GET ASSESSMENTS
+const courseSelect = document.getElementById("courseId");
+const typeSelect = document.getElementById("type");
+const assessmentBody = document.getElementById("assessmentBody");
+const noAssessmentsMessage = document.querySelector(".no-assessments-message");
+
+function checkSelections() {
+  return courseSelect.value !== "" && typeSelect.value !== "";
+}
+
+function displayAssessments(assessments) {
+  // Clear previous assessments
+  assessmentBody.innerHTML = "";
+
+  if (assessments.length > 0) {
+    noAssessmentsMessage.style.display = "none";
+    assessments.forEach((assessment, index) => {
+      const row = document.createElement("tr");
+
+      row.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${assessment.assessmentName}</td>
+        <td>${assessment.type}</td>
+        <td>${assessment.courseId.courseName}</td>
+      `;
+
+      assessmentBody.appendChild(row);
+    });
+  } else {
+    noAssessmentsMessage.style.display = "block";
+  }
+}
+
+async function fetchAssessments(courseId, type) {
+  try {
+    noAssessmentsMessage.style.display = "none"; // Hide no results message initially
+
+    const response = await axios.get(
+      `/assessments?courseId=${courseId}&type=${type}`
+    );
+
+    displayAssessments(response.data);
+  } catch (error) {
+    console.error("Error fetching assessments:", error);
+    noAssessmentsMessage.style.display = "block";
+    noAssessmentsMessage.textContent =
+      "An error occurred while fetching assessments.";
+  }
+}
+
+async function handleSelectionChange() {
+  // Clear previous results and hide no-results message before fetching new data
+  assessmentBody.innerHTML = "";
+  noAssessmentsMessage.style.display = "none";
+
+  if (checkSelections()) {
+    const courseId = courseSelect.value;
+    const type = typeSelect.value;
+
+    // Fetch assessments and handle the response
+    await fetchAssessments(courseId, type);
+  } else {
+    // If selections are not valid, display no-results message
+    noAssessmentsMessage.style.display = "block";
+    noAssessmentsMessage.textContent =
+      "Please select both course and assessment type.";
+  }
+}
+
+if (courseSelect) {
+  courseSelect.addEventListener("change", handleSelectionChange);
+}
+
+if (typeSelect) {
+  typeSelect.addEventListener("change", handleSelectionChange);
+}

@@ -91,4 +91,21 @@ async function getQuestion(req, res, next) {
   next();
 }
 
+// ! GET all questions related to a specific course
+router.get("/course/:courseId/questions", async (req, res) => {
+  try {
+    const courseId = req.params.courseId;
+    const questions = await Question.find({ courseId });
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        questions,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 module.exports = router;

@@ -2,6 +2,21 @@
 const express = require("express");
 const router = express.Router();
 const Course = require("../models/Course");
+const Question = require("../models/Question");
+const authController = require("../controllers/authController");
+
+router.get("/:courseId/questions", authController.protect, async (req, res) => {
+  try {
+    const courseId = req.params.courseId;
+    const questions = await Question.find({ courseId }).populate(
+      "createdBy",
+      "name"
+    );
+    res.render("user-questions", { questions });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 // Get all courses
 router.get("/", async (req, res) => {

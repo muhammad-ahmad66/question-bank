@@ -84,7 +84,7 @@ block content
                       td= course.courseCode
                       td= course.credits
                       td
-                        button.btn.btn-assign-course(data-course-id=course._id) View Questions
+                        button.btn.btn-assign-course#btn-view-question(data-course-id=course._id) View Questions
                         //- button.btn.btn-delete Delete
 
 
@@ -132,31 +132,38 @@ block content
 
 
         #assessments.user-view__form-container
-          h2.heading-secondary.ma-bt-md Assessments
-          //-  user.missingReportedPersons
-          if user.missingReportedPersons && user.missingReportedPersons.length > 0
-            .persons-container
-              each person in user.missingReportedPersons 
-                .person-card
-                  img.person-card__photo(src=`/img/missing-persons/${person.photo}`, alt=`${person.name}'s Photo`)
-                  h3.person-card__name #{person.name}
-                  p.person-card__location= `From: ${person.location.city}, ${person.location.country}`
-                  p.person-card__description= person.additionalDetails
-                  .person-card__btn-box 
-                    a.person-card__btn(href=`/persons/${person._id}`)
-                      i.fa-solid.fa-user-pen  
-                      | Update
-                    a.person-card__btn(href=`/persons/${person._id}`)
-                      i.fa-solid.fa-trash  
-                      | Delete
-                  a.person-card__btn-detail(href=`/persons/${person._id}`) Details
-          else 
-            .persons-container__no-persons
-              p.persons-container__no-persons-text
-                | You have no found persons yet!
-              p.persons-container__no-persons-text  
-                | Please add a new Person here 
-                a.persons-container__no-persons-link(href="http://127.0.0.1:800/report-found-person", class="persons-container__link") Add New Person
+          .assessments-form-container
+            h2.assessments-heading Assessments
+
+            .assessments-row
+              .assessments-input-group
+                label(for="courseId") Select Course:
+                select#courseId(name="courseId" required)
+                  option(value="" disabled selected) -- Select Course --
+                  each course in courses
+                    option(value=course._id) #{course.courseName}
+
+              .assessments-input-group
+                label(for="type") Assessment Type:
+                select#type(name="type" required)
+                  option(value="" disabled selected) -- Select Type --
+                  option(value="quiz") Quiz
+                  option(value="assignment") Assignment
+                  option(value="mid-term") Mid-Term
+                  option(value="final-term") Final-Term
+
+              button.assessments-btn#makeAssessment(type="button") Make New Assessment
+
+          #assessmentContainer
+            table.assessments-table
+              thead
+                tr
+                  th #
+                  th Assessment Name
+                  th Type
+                  th Course Name
+              tbody#assessmentBody
+            p.no-assessments-message No assessments available for the selected course and type.
 
 
         #other-activities.user-view__form-container
