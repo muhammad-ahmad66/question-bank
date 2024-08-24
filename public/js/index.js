@@ -223,7 +223,7 @@ if (addQuestionForm)
   addQuestionForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const questionText = document.getElementById("questionText").value;
-    const courseId = document.getElementById("courseId").value;
+    const courseId = document.getElementById("courseIdForQuestion").value;
     const clo = document.getElementById("clo").value;
     const plo = document.getElementById("plo").value;
     const difficulty = document.getElementById("difficulty").value;
@@ -307,6 +307,10 @@ function displayAssessments(assessments) {
         <td>${assessment.assessmentName}</td>
         <td>${assessment.type}</td>
         <td>${assessment.courseId.courseName}</td>
+        <td>
+          <button class="view-btn">View</button>
+          <button class="download-btn">Download</button>
+        </td>
       `;
 
       assessmentBody.appendChild(row);
@@ -334,21 +338,25 @@ async function fetchAssessments(courseId, type) {
 }
 
 async function handleSelectionChange() {
-  // Clear previous results and hide no-results message before fetching new data
-  assessmentBody.innerHTML = "";
-  noAssessmentsMessage.style.display = "none";
+  try {
+    if (checkSelections()) {
+      const courseId = courseSelect.value;
+      const type = typeSelect.value;
 
-  if (checkSelections()) {
-    const courseId = courseSelect.value;
-    const type = typeSelect.value;
-
-    // Fetch assessments and handle the response
-    await fetchAssessments(courseId, type);
-  } else {
-    // If selections are not valid, display no-results message
+      // Fetch assessments and handle the response
+      await fetchAssessments(courseId, type);
+    } else {
+      // Clear previous results and hide no-results message
+      assessmentBody.innerHTML = "";
+      noAssessmentsMessage.style.display = "none";
+    }
+  } catch (error) {
+    // Handle any errors that occur during the fetching process
+    console.error("Error during selection change:", error);
+    assessmentBody.innerHTML = ""; // Clear previous results
     noAssessmentsMessage.style.display = "block";
     noAssessmentsMessage.textContent =
-      "Please select both course and assessment type.";
+      "An error occurred while processing your request. Please try again.";
   }
 }
 
@@ -359,3 +367,104 @@ if (courseSelect) {
 if (typeSelect) {
   typeSelect.addEventListener("change", handleSelectionChange);
 }
+
+// ! ADD NEW ASSESSMENT
+document.addEventListener("DOMContentLoaded", function () {
+  const courseSelect = document.getElementById("courseId");
+  const typeSelect = document.getElementById("type");
+  const makeAssessmentBtn = document.getElementById("makeAssessment");
+
+  // Function to update the button href based on selected course and type
+  function updateButtonHref() {
+    const courseId = courseSelect.value;
+    const type = typeSelect.value;
+
+    if (courseId && type) {
+      makeAssessmentBtn.href = `/assessments/new?courseId=${courseId}&type=${type}`;
+    } else {
+      makeAssessmentBtn.href = "#"; // Default href when no courseId or type is selected
+    }
+  }
+
+  // Update the button href when course or type changes
+  courseSelect.addEventListener("change", updateButtonHref);
+  typeSelect.addEventListener("change", updateButtonHref);
+
+  // Initial update
+  updateButtonHref();
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  // Extract URL parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  console.log("URL Params: ", urlParams);
+  const courseId = urlParams.get("courseId");
+  const type = urlParams.get("type");
+
+  console.log("Course Id: ", courseId);
+  console.log("Type: ", type);
+
+  // Set hidden fields if parameters are available
+  if (courseId) {
+    document.getElementById("hiddenCourseId").value = courseId;
+  }
+  if (type) {
+    document.getElementById("hiddenType").value = type;
+  }
+
+  // Form validation on submit
+  const assessmentFrom = document.getElementById("assessmentForm");
+  if (assessmentFrom)
+    assessmentFrom.addEventListener("submit", function (event) {
+      const courseId = document.getElementById("hiddenCourseId").value.trim();
+      const type = document.getElementById("hiddenType").value.trim();
+      const assessmentName = document
+        .getElementById("assessmentName")
+        .value.trim();
+      const startDate = document.getElementById("startDate").value;
+      const endDate = document.getElementById("endDate").value;
+      const description = document.getElementById("description").value.trim();
+      // const selectedQuestions = document.querySelectorAll(
+      //   'input[name="questions"]:checked'
+      // );
+      const selectedQuestions = document.getElementById("questions").value;
+
+      console.log("SELECTED QUESTIONS: ", selectedQuestions);
+      // Validation checks
+      if (!courseId || !type) {
+        alert("Course ID and Assessment Type must be selected.");
+        event.preventDefault();
+        return;
+      }
+
+      if (!assessmentName) {
+        alert("Assessment Name is required.");
+        event.preventDefault();
+        return;
+      }
+
+      if (!startDate) {
+        alert("Start Date is required.");
+        event.preventDefault();
+        return;
+      }
+
+      if (!endDate) {
+        alert("End Date is required.");
+        event.preventDefault();
+        return;
+      }
+
+      if (!description) {
+        alert("Description is required.");
+        event.preventDefault();
+        return;
+      }
+
+      if (selectedQuestions.length === 0) {
+        alert("At least one question must be selected.");
+        event.preventDefault();
+        return;
+      }
+    });
+});

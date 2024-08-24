@@ -1,0 +1,49 @@
+extends base
+
+block append head 
+  link(rel="stylesheet" href="/css/addAssessment.css")
+  link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css")
+
+block content
+  .container
+    h1 Add New Assessment
+    form#assessmentForm(action="/assessments" method="POST")
+      //- Hidden inputs to receive courseId and assessment type
+      input#hiddenCourseId(type="hidden" name="courseId" required)
+      input#hiddenType(type="hidden" name="type" required)
+      
+      .form-group
+        label(for="assessmentName") Assessment Name:
+        input#assessmentName(type="text" name="assessmentName" required)
+      
+      .form-group
+        label(for="questions") Select Questions:
+        select#questions(name="questions" multiple="multiple" required)
+          each question in questions
+            option(style="fontSize: 20px" value=question._id) #{question.questionText}
+      
+      .form-group
+        label(for="startDate") Start Date:
+        input#startDate(type="date" name="startDate" required)
+      
+      .form-group
+        label(for="endDate") End Date:
+        input#endDate(type="date" name="endDate" required)
+      
+      .form-group
+        label(for="description") Description:
+        textarea#description(name="description" rows="4")
+
+      button(type="submit") Add Assessment
+
+block append scripts
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js")
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js")
+  script.
+    $(document).ready(function() {
+      $('#questions').select2({
+         fontSize: 'resolve',
+        width: '100%',
+        fontSize: '1.6rem'
+      });
+    });

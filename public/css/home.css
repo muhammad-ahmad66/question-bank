@@ -435,3 +435,27 @@ label {
   text-align: center;
   margin-top: 2rem;
 }
+
+.view-btn,
+.download-btn {
+  background-color: #113492; /* Primary color */
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin-right: 5px;
+  border-radius: 3px;
+  transition: all 0.3s;
+}
+
+.download-btn {
+  background-color: #1dcb6e;
+}
+
+.view-btn:hover {
+  background-color: #0d286d;
+}
+
+.download-btn:hover {
+  background-color: #1aa36f;
+}

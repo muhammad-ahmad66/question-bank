@@ -53,7 +53,7 @@ exports.getHome = async (req, res) => {
   // getting all courses
   const courses = await Course.find();
 
-  console.log("Document: ", doc);
+  // console.log("Document: ", doc);
 
   if (!doc) {
     return next(new AppError("No document found with that ID", 404));

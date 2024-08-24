@@ -17,6 +17,12 @@ const assessmentSchema = new Schema({
     ref: "Course",
     required: [true, "Please provide a course ID"],
   },
+  questions: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Question",
+    },
+  ],
   startDate: {
     type: Date,
     // required: [true, "Please provide a start date"],
@@ -35,4 +41,5 @@ const assessmentSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model("Assessment", assessmentSchema);
+module.exports =
+  mongoose.models.Assessment || mongoose.model("Assessment", assessmentSchema);

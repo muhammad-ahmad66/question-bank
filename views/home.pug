@@ -152,7 +152,8 @@ block content
                   option(value="mid-term") Mid-Term
                   option(value="final-term") Final-Term
 
-              button.assessments-btn#makeAssessment(type="button") Make New Assessment
+
+              a.assessments-btn#makeAssessment(type="button") Make New Assessment
 
           #assessmentContainer
             table.assessments-table
@@ -162,6 +163,8 @@ block content
                   th Assessment Name
                   th Type
                   th Course Name
+                  th Actions
+
               tbody#assessmentBody
             p.no-assessments-message No assessments available for the selected course and type.
 
@@ -199,8 +202,8 @@ block content
 
                 // dropdown menu to show all the courses that are available in our application, loop
                 .form-group
-                  label(for="courseId") Courses
-                  select#courseId.form-input
+                  label(for="courseIdForQuestion") Courses
+                  select#courseIdForQuestion.form-input
                     each course in courses
                       option(value=course._id)= course.courseName
 
