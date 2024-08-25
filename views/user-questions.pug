@@ -26,8 +26,8 @@ block content
               td #{question.questionText}
               td #{question.clo}
               td #{question.plo}
-              td #{question.difficulty}
-              td #{question.createdBy.name}
+              td #{question.difficulty.charAt(0).toUpperCase() + question.difficulty.slice(1)}
+              td #{question.createdBy.name.charAt(0).toUpperCase() + question.createdBy.name.slice(1)}
               td #{new Date(question.createdDate).toLocaleDateString()}
     else
       p No questions found.

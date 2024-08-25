@@ -226,7 +226,7 @@ if (addQuestionForm)
     const courseId = document.getElementById("courseIdForQuestion").value;
     const clo = document.getElementById("clo").value;
     const plo = document.getElementById("plo").value;
-    const difficulty = document.getElementById("difficulty").value;
+    // const difficulty = document.getElementById("difficulty").value;
     const marks = document.getElementById("marks").value;
     const userId = document.getElementById("btn-create-question").dataset
       .createdBy;
@@ -237,7 +237,7 @@ if (addQuestionForm)
         courseId,
         clo,
         plo,
-        difficulty,
+        // difficulty,
         marks,
         createdBy: userId,
       });
@@ -308,7 +308,9 @@ function displayAssessments(assessments) {
         <td>${assessment.type}</td>
         <td>${assessment.courseId.courseName}</td>
         <td>
-          <button class="view-btn">View</button>
+          <button data-assessment-id=${
+            assessment._id
+          } class="view-btn">View</button>
           <button class="download-btn">Download</button>
         </td>
       `;
@@ -467,4 +469,41 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
     });
+
+  // ! DOWNLOAD ASSESSMENT
+  const downloadAssessment = document.getElementById("downloadButton");
+
+  if (downloadAssessment)
+    downloadAssessment.addEventListener("click", () => {
+      const { jsPDF } = window.jspdf;
+
+      const content = document.getElementById("contentToConvert");
+      html2canvas(content).then((canvas) => {
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF("p", "mm", "a4");
+        const imgWidth = 210;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+        pdf.save("assessment.pdf");
+      });
+    });
+
+  courseSelect.addEventListener("change", updateView);
+  typeSelect.addEventListener("change", updateView);
+
+  // !view button
+  function updateView() {
+    const viewButtons = document.querySelectorAll(".view-btn");
+    console.log(viewButtons);
+    if (viewButtons)
+      viewButtons.forEach(function (btn) {
+        btn.addEventListener("click", async function () {
+          const assessmentId = btn.dataset.assessmentId;
+          try {
+            const url = `/assessments/${assessmentId}`;
+            window.location.href = url;
+          } catch (e) {}
+        });
+      });
+  }
 });

@@ -1,0 +1,57 @@
+extends base
+
+block append head
+  link(rel="stylesheet" href="/css/viewAssessment.css")
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js")
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+block content
+  .assessment-container#contentToConvert
+    header
+      .row-1
+        img(src="/img/MUST-logo.png", alt="MUST Logo")
+        h1 
+          span Mirpur University of Science and 
+          span Technology Mirpur AJ&K
+      
+      .row-2 
+        p= assessment.type.toUpperCase()
+      
+
+    .assessment-details
+      .details-column
+        p
+          span.bold Course Title:
+          |  #{course.courseName}
+        p
+          span.bold  Course Code:
+          |  #{course.courseCode}
+
+
+      .details-column
+        p
+          span.bold Department:
+          |  #{course.department}
+
+        p 
+          -let semester = "6TH"; // This value comes from the database
+
+          // Separate the integer part and the "TH" part
+          -let numberPart = semester.match(/\d+/)[0];
+          -let textPart = semester.match(/[A-Za-z]+/)[0];
+
+          // Combine them with the superscript tag
+          -let formattedSemester = `${numberPart}<sup>${textPart.toLowerCase()}</sup>`;
+          span.bold Semester: 
+          span= `${numberPart}`
+            sup=`${textPart.toLowerCase()}`
+          //- |  #{course.semester}
+
+    .questions-section
+      h2 Questions
+      ol
+        each question in questions
+          li
+            p #{question.questionText}
+
+  button#downloadButton(type="button") Download PDF

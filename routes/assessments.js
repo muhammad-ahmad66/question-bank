@@ -5,6 +5,7 @@ const Assessment = require("../models/Assessment");
 const Course = require("../models/Course");
 const Question = require("../models/Question");
 const mongoose = require("mongoose");
+const authController = require("../controllers/AuthController");
 
 // Get all assessments
 // router.get("/", async (req, res) => {
@@ -109,13 +110,42 @@ async function getAssessment(req, res, next) {
 }
 
 // GET route to render the form with courses and questions
-router.get("/new", async (req, res) => {
+router.get("/new", authController.protect, async (req, res) => {
   try {
     const courseId = req.query.courseId;
 
     const courses = await Course.find();
     const questions = await Question.find({ courseId: courseId });
     res.render("addAssessment", { courses, questions });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+router.get("/:id", authController.protect, async (req, res) => {
+  try {
+    const assessmentId = req.params.id;
+
+    // Find the assessment by ID
+    const assessment = await Assessment.findById(assessmentId).populate(
+      "questions"
+    );
+
+    if (!assessment) {
+      return res.status(404).json({ message: "Assessment not found" });
+    }
+
+    // Find the course related to the assessment
+    const course = await Course.findById(assessment.courseId);
+
+    console.log("QUESTIONS: ", assessment);
+    console.log("COURSE: ", course);
+    // Render the Pug template with the assessment, course, and related questions
+    res.render("viewAssessment", {
+      assessment,
+      course,
+      questions: assessment.questions,
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

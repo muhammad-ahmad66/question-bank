@@ -19,7 +19,6 @@ router.post("/", async (req, res) => {
     questionText: req.body.questionText,
     clo: req.body.clo,
     plo: req.body.plo,
-    difficulty: req.body.difficulty,
     createdBy: req.body.createdBy,
     courseId: req.body.courseId,
   });
