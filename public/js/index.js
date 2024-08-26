@@ -283,93 +283,6 @@ if (btnViewQuestion)
     });
   });
 
-// ! GET ASSESSMENTS
-const courseSelect = document.getElementById("courseId");
-const typeSelect = document.getElementById("type");
-const assessmentBody = document.getElementById("assessmentBody");
-const noAssessmentsMessage = document.querySelector(".no-assessments-message");
-
-function checkSelections() {
-  return courseSelect.value !== "" && typeSelect.value !== "";
-}
-
-function displayAssessments(assessments) {
-  // Clear previous assessments
-  assessmentBody.innerHTML = "";
-
-  if (assessments.length > 0) {
-    noAssessmentsMessage.style.display = "none";
-    assessments.forEach((assessment, index) => {
-      const row = document.createElement("tr");
-
-      row.innerHTML = `
-        <td>${index + 1}</td>
-        <td>${assessment.assessmentName}</td>
-        <td>${assessment.type}</td>
-        <td>${assessment.courseId.courseName}</td>
-        <td>
-          <button data-assessment-id=${
-            assessment._id
-          } class="view-btn">View</button>
-          <button class="download-btn">Download</button>
-        </td>
-      `;
-
-      assessmentBody.appendChild(row);
-    });
-  } else {
-    noAssessmentsMessage.style.display = "block";
-  }
-}
-
-async function fetchAssessments(courseId, type) {
-  try {
-    noAssessmentsMessage.style.display = "none"; // Hide no results message initially
-
-    const response = await axios.get(
-      `/assessments?courseId=${courseId}&type=${type}`
-    );
-
-    displayAssessments(response.data);
-  } catch (error) {
-    console.error("Error fetching assessments:", error);
-    noAssessmentsMessage.style.display = "block";
-    noAssessmentsMessage.textContent =
-      "An error occurred while fetching assessments.";
-  }
-}
-
-async function handleSelectionChange() {
-  try {
-    if (checkSelections()) {
-      const courseId = courseSelect.value;
-      const type = typeSelect.value;
-
-      // Fetch assessments and handle the response
-      await fetchAssessments(courseId, type);
-    } else {
-      // Clear previous results and hide no-results message
-      assessmentBody.innerHTML = "";
-      noAssessmentsMessage.style.display = "none";
-    }
-  } catch (error) {
-    // Handle any errors that occur during the fetching process
-    console.error("Error during selection change:", error);
-    assessmentBody.innerHTML = ""; // Clear previous results
-    noAssessmentsMessage.style.display = "block";
-    noAssessmentsMessage.textContent =
-      "An error occurred while processing your request. Please try again.";
-  }
-}
-
-if (courseSelect) {
-  courseSelect.addEventListener("change", handleSelectionChange);
-}
-
-if (typeSelect) {
-  typeSelect.addEventListener("change", handleSelectionChange);
-}
-
 // ! ADD NEW ASSESSMENT
 document.addEventListener("DOMContentLoaded", function () {
   const courseSelect = document.getElementById("courseId");
@@ -403,9 +316,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const courseId = urlParams.get("courseId");
   const type = urlParams.get("type");
 
-  console.log("Course Id: ", courseId);
-  console.log("Type: ", type);
-
   // Set hidden fields if parameters are available
   if (courseId) {
     document.getElementById("hiddenCourseId").value = courseId;
@@ -431,7 +341,6 @@ document.addEventListener("DOMContentLoaded", function () {
       // );
       const selectedQuestions = document.getElementById("questions").value;
 
-      console.log("SELECTED QUESTIONS: ", selectedQuestions);
       // Validation checks
       if (!courseId || !type) {
         alert("Course ID and Assessment Type must be selected.");
@@ -490,20 +399,120 @@ document.addEventListener("DOMContentLoaded", function () {
 
   courseSelect.addEventListener("change", updateView);
   typeSelect.addEventListener("change", updateView);
-
-  // !view button
-  function updateView() {
-    const viewButtons = document.querySelectorAll(".view-btn");
-    console.log(viewButtons);
-    if (viewButtons)
-      viewButtons.forEach(function (btn) {
-        btn.addEventListener("click", async function () {
-          const assessmentId = btn.dataset.assessmentId;
-          try {
-            const url = `/assessments/${assessmentId}`;
-            window.location.href = url;
-          } catch (e) {}
-        });
-      });
-  }
 });
+
+// !------------
+// ! GET ASSESSMENTS
+const courseSelect = document.getElementById("courseId");
+const typeSelect = document.getElementById("type");
+const assessmentBody = document.getElementById("assessmentBody");
+const noAssessmentsMessage = document.querySelector(".no-assessments-message");
+
+function checkSelections() {
+  console.log("Checking selections:", courseSelect.value, typeSelect.value);
+  return courseSelect.value !== "" && typeSelect.value !== "";
+}
+
+function displayAssessments(assessments) {
+  // Clear previous assessments
+  assessmentBody.innerHTML = "";
+
+  if (assessments.length > 0) {
+    noAssessmentsMessage.style.display = "none";
+    assessments.forEach((assessment, index) => {
+      const row = document.createElement("tr");
+
+      row.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${assessment.assessmentName}</td>
+        <td>${assessment.type}</td>
+        <td>${assessment.courseId.courseName}</td>
+        <td>
+          <button data-assessment-id=${
+            assessment._id
+          } class="view-btn">View</button>
+          <button class="download-btn">Download</button>
+        </td>
+      `;
+
+      assessmentBody.appendChild(row);
+    });
+
+    // Call updateView to attach event listeners to the new buttons
+    updateView();
+  } else {
+    noAssessmentsMessage.style.display = "block";
+    noAssessmentsMessage.textContent =
+      "No assessments found for the selected course and type. Try Different!";
+  }
+}
+
+async function fetchAssessments(courseId, type) {
+  try {
+    noAssessmentsMessage.style.display = "none"; // Hide no results message initially
+    console.log("Fetching assessments for:", courseId, type);
+
+    const response = await axios.get(
+      `/assessments?courseId=${courseId}&type=${type}`
+    );
+
+    console.log("Assessments fetched:", response.data);
+    displayAssessments(response.data);
+  } catch (error) {
+    console.error("Error fetching assessments:", error);
+    noAssessmentsMessage.style.display = "block";
+    noAssessmentsMessage.textContent =
+      "No assessments found for the selected course and type. Try Different!";
+  }
+}
+
+async function handleSelectionChange() {
+  try {
+    console.log("Selection changed:", courseSelect.value, typeSelect.value);
+    if (checkSelections()) {
+      const courseId = courseSelect.value;
+      const type = typeSelect.value;
+
+      // Fetch assessments and handle the response
+      fetchAssessments(courseId, type);
+    } else {
+      // Clear previous results and hide no-results message
+      assessmentBody.innerHTML = "";
+      noAssessmentsMessage.style.display = "none";
+    }
+  } catch (error) {
+    // Handle any errors that occur during the fetching process
+    console.error("Error during selection change:", error);
+    assessmentBody.innerHTML = ""; // Clear previous results
+    noAssessmentsMessage.style.display = "block";
+    noAssessmentsMessage.textContent =
+      "No assessments found for the selected course and type. Try Different!";
+  }
+}
+
+if (courseSelect) {
+  courseSelect.addEventListener("change", handleSelectionChange);
+}
+
+if (typeSelect) {
+  typeSelect.addEventListener("change", handleSelectionChange);
+}
+
+// ! Displaying Selected Assessment
+function updateView() {
+  const viewButtons = document.querySelectorAll(".view-btn");
+  console.log(viewButtons);
+  if (viewButtons) {
+    viewButtons.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        const assessmentId = btn.dataset.assessmentId;
+        try {
+          const url = `/assessments/${assessmentId}`;
+          window.location.href = url;
+        } catch (e) {
+          console.error("Error navigating to assessment:", e);
+        }
+      });
+    });
+  }
+}

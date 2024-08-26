@@ -23,7 +23,7 @@ const questionSchema = new Schema({
   },
   difficulty: {
     type: String,
-    enum: ["easy", "medium", "hard"],
+    enum: ["dl-1", "dl-2", "dl-3", "dl-4"],
   },
   createdBy: {
     type: Schema.Types.ObjectId,
@@ -41,16 +41,16 @@ const questionSchema = new Schema({
   },
 });
 
-// Pre-save middleware to automatically set the difficulty based on CLO and PLO
+// Pre-save middleware to automatically set the difficulty based on CLO
 questionSchema.pre("save", function (next) {
-  const avgValue = (this.clo + this.plo) / 2;
-
-  if (avgValue >= 1 && avgValue <= 3) {
-    this.difficulty = "easy";
-  } else if (avgValue >= 4 && avgValue <= 6) {
-    this.difficulty = "medium";
-  } else if (avgValue >= 7 && avgValue <= 10) {
-    this.difficulty = "hard";
+  if (this.clo == 1) {
+    this.difficulty = "dl-1";
+  } else if (this.clo == 2 || this.clo == 3) {
+    this.difficulty = "dl-2";
+  } else if (this.clo == 4 || this.clo == 5) {
+    this.difficulty = "dl-3";
+  } else {
+    this.difficulty = "dl-4";
   }
 
   next();

@@ -180,7 +180,8 @@ router.post("/", async (req, res) => {
 
     // Redirect to the list of assessments
     // res.redirect("/assessments");
-    res.status(201).json(newAssessment); // Return the new assessment as JSON
+    // res.status(201).json(newAssessment); // Return the new assessment as JSON
+    res.redirect(`/assessments/${newAssessment._id}`);
   } catch (err) {
     console.error("Error creating assessment:", err.message);
     res
